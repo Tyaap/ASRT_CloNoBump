@@ -1,5 +1,5 @@
 # CloNoBump
-S&amp;ASRT mod which disables: character restriction, collions between players, AI players
+S&amp;ASRT mod which removed character restrictions, removes collions between players, removes AI, increases DNF countdown to 60 seconds
 
 # How to install
 * Start S&ASRT then run this program, it should notify you that the mod is activated.

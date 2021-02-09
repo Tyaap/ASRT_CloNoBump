@@ -34,6 +34,8 @@ namespace CloNoBump
                     Environment.Exit(2);
                 }
 
+                SetBytes(ReadInt(0xBD0174) + 0x68 * 0 + 0x18, new byte[] { 60 });
+                SetBytes(ReadInt(0xBD0174) + 0x68 * 14 + 0x18, new byte[] { 60 });
                 SetBytes(0x47B483, new byte[] { 0xE9, 0xE2, 0xF9, 0x53, 0x00, 0x90 });
                 SetBytes(0x47C91D, new byte[] { 0xEB });
                 SetBytes(0x47CD99, new byte[] { 0xE9, 0x85, 0x00, 0x00, 0x00, 0x90 });

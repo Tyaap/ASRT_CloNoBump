@@ -16,22 +16,25 @@ namespace CloNoBump
         [DllImport("kernel32.dll")]
         private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, int lpNumberOfBytesRead);
 
-        private static int processHandle;
-
+        private static int processHandle = 0;
         static void Main()
         {
             Application.EnableVisualStyles();
 
-            Process[] processList = Process.GetProcessesByName("ASN_App_PcDx9_Final");
-
-            foreach (Process process in processList)
+            int gameProcesses = 0;
+            foreach (Process process in Process.GetProcesses())
             {
-                processHandle = OpenProcess(0x38, 0, process.Id);
+                if(process.MainWindowTitle != "Sonic & All-Stars Racing Transformed - BUILD (532043 - Jan 15 2014 10:38:42)")
+                {
+                    continue;
+                }
+                gameProcesses++;
 
+                processHandle = OpenProcess(0x38, 0, process.Id);
                 if (processHandle == 0)
                 {
                     MessageBox.Show("Could not access the game, please run as administrator!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                    Environment.Exit(2);
+                    return;
                 }
 
                 SetBytes(ReadInt(0xBD0174) + 0x68 * 0 + 0x18, new byte[] { 60 });
@@ -49,19 +52,19 @@ namespace CloNoBump
                 SetBytes(0x9BAE6C, BitConverter.GetBytes(ReadInt(0xEC1A88) + 0x101D6C));
             }
 
-            if (processList.Length > 0)
+            if (gameProcesses > 0)
             {
                 MessageBox.Show(
                     "In custom games you are now:\n\n" +
                     "● Free to choose the same character multiple times!\n" +
                     "● Free from bumps!\n" +
-                    "● Free from AI players!\n\n" +
+                    "● Free from AI players!\n" +
+                    "● Able to race 60 seconds before getting DNF!\n\n" +
                     "Enjoy! :)", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("Please start the game first!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                Environment.Exit(0);
             }
         }
 

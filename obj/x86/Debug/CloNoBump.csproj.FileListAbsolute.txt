@@ -1,0 +1,8 @@
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\bin\x86\Debug\CloNoBump.exe
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\bin\x86\Debug\CloNoBump.pdb
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.csprojAssemblyReference.cache
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.Properties.Resources.resources
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.csproj.GenerateResource.cache
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.csproj.CoreCompileInputs.cache
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.exe
+E:\S&ASRT\CloNoBump\ASRT_CloNoBump\obj\x86\Debug\CloNoBump.pdb

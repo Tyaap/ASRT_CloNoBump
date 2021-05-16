@@ -13,7 +13,7 @@ namespace CloNoBump
         [DllImport("kernel32")]
         private static extern bool WriteProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int nSize, int lpNumberOfBytesWritten);
 
-        [DllImport("kernel32.dll")]
+        [DllImport("kernel32")]
         private static extern bool ReadProcessMemory(int hProcess, int lpBaseAddress, byte[] lpBuffer, int dwSize, int lpNumberOfBytesRead);
 
         private static int processHandle = 0;
@@ -42,7 +42,6 @@ namespace CloNoBump
                 SetBytes(0x47B483, new byte[] { 0xE9, 0xE2, 0xF9, 0x53, 0x00, 0x90 });
                 SetBytes(0x47C91D, new byte[] { 0xEB });
                 SetBytes(0x47CD99, new byte[] { 0xE9, 0x85, 0x00, 0x00, 0x00, 0x90 });
-                SetBytes(0x47D384, new byte[] { 0xE9, 0x16, 0x01, 0x00, 0x00, 0x90 });
                 SetBytes(0x4EEDC5, new byte[] { 0xEB });
                 SetBytes(0x72CE65, new byte[] { 0xE9, 0x89, 0x00, 0x00, 0x00, 0x90 });
                 SetBytes(0x7C4721, new byte[] { 0xEB });
@@ -50,21 +49,24 @@ namespace CloNoBump
                 SetBytes(0x85042D, new byte[] { 0xEB });
                 SetBytes(0x9BAE6A, new byte[] { 0x50, 0xA0, 0x86, 0xAE, 0x9B, 0x00, 0x24, 0x0F, 0x3C, 0x00, 0x74, 0x04, 0xC6, 0x45, 0x0C, 0x45, 0x58, 0x8B, 0x45, 0x10, 0x83, 0xEC, 0x18, 0xE9, 0x03, 0x06, 0xAC, 0xFF });
                 SetBytes(0x9BAE6C, BitConverter.GetBytes(ReadInt(0xEC1A88) + 0x101D6C));
+                SetBytes(0x473343, new byte[] { 0x31, 0xC0, 0x90 });
+                SetBytes(ReadInt(0xEC1A88) + 0x3D4, new byte[] { 0 });
             }
 
             if (gameProcesses > 0)
             {
                 MessageBox.Show(
-                    "In custom games you are now:\n\n" +
-                    "● Free to choose the same character multiple times!\n" +
-                    "● Free from bumps!\n" +
-                    "● Free from AI players!\n" +
-                    "● Able to race 60 seconds before getting DNF!\n\n" +
+                    "CloNoBump is ENABLED!\n\n" +
+                    "In custom games you are now:\n" +
+                    " ➤ Free to choose the same character multiple times!\n" +
+                    " ➤ Free from bumps!\n" +
+                    " ➤ Free from AI players!\n" +
+                    " ➤ Able to race 60 seconds before getting DNF!\n\n" +
                     "Enjoy! :)", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
-                MessageBox.Show("Please start the game first!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Please start Sonic & All-Stars Racing Transformed first!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

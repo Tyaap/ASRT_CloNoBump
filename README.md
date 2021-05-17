@@ -1,4 +1,4 @@
-[![Header](CloNoBump.png "Header")](https://some-url.dev/)
+![Header](CloNoBump.png "Header")
 
 # How to install
 1. Download `CloNoBump.exe` from the [latest release](https://github.com/Tyaap/CloNoBump/releases)

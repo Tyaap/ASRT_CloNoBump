@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
+using static MemoryHelper;
 
 namespace CloNoBump
 {
@@ -30,27 +31,29 @@ namespace CloNoBump
                 }
                 gameProcesses++;
 
-                processHandle = OpenProcess(0x38, 0, process.Id);
-                if (processHandle == 0)
+                if (!MemoryHelper.Initialise(process.Id))
                 {
                     MessageBox.Show("Could not access the game, please run as administrator!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Error);
                     return;
                 }
 
-                SetBytes(ReadInt(0xBD0174) + 0x68 * 0 + 0x18, new byte[] { 60 });
-                SetBytes(ReadInt(0xBD0174) + 0x68 * 14 + 0x18, new byte[] { 60 });
-                SetBytes(0x47B483, new byte[] { 0xE9, 0xE2, 0xF9, 0x53, 0x00, 0x90 });
-                SetBytes(0x47C91D, new byte[] { 0xEB });
-                SetBytes(0x47CD99, new byte[] { 0xE9, 0x85, 0x00, 0x00, 0x00, 0x90 });
-                SetBytes(0x4EEDC5, new byte[] { 0xEB });
-                SetBytes(0x72CE65, new byte[] { 0xE9, 0x89, 0x00, 0x00, 0x00, 0x90 });
-                SetBytes(0x7C4721, new byte[] { 0xEB });
-                SetBytes(0x8503C6, new byte[] { 0x90, 0x90 });
-                SetBytes(0x85042D, new byte[] { 0xEB });
-                SetBytes(0x9BAE6A, new byte[] { 0x50, 0xA0, 0x86, 0xAE, 0x9B, 0x00, 0x24, 0x0F, 0x3C, 0x00, 0x74, 0x04, 0xC6, 0x45, 0x0C, 0x45, 0x58, 0x8B, 0x45, 0x10, 0x83, 0xEC, 0x18, 0xE9, 0x03, 0x06, 0xAC, 0xFF });
-                SetBytes(0x9BAE6C, BitConverter.GetBytes(ReadInt(0xEC1A88) + 0x101D6C));
-                SetBytes(0x473343, new byte[] { 0x31, 0xC0, 0x90 });
-                SetBytes(ReadInt(0xEC1A88) + 0x3D4, new byte[] { 0 });
+                Write(0x47B483, new byte[] { 0xE9, 0xE2, 0xF9, 0x53, 0x00, 0x90 });
+                Write(0x47C91D, new byte[] { 0xEB });
+                Write(0x47CD99, new byte[] { 0xE9, 0x85, 0x00, 0x00, 0x00, 0x90 });
+                Write(0x4EEDC5, new byte[] { 0xEB });
+                Write(0x72CE65, new byte[] { 0xE9, 0x89, 0x00, 0x00, 0x00, 0x90 });
+                Write(0x8503C6, new byte[] { 0x90, 0x90 });
+                Write(0x85042D, new byte[] { 0xEB });
+                Write(0x9BAE6A, new byte[] { 0x50, 0xA0, 0x86, 0xAE, 0x9B, 0x00, 0x24, 0x0F, 0x3C, 0x00, 0x74, 0x04, 0xC6, 0x45, 0x0C, 0x45, 0x58, 0x8B, 0x45, 0x10, 0x83, 0xEC, 0x18, 0xE9, 0x03, 0x06, 0xAC, 0xFF });
+                Write(0x9BAE6C, ReadInt(0xEC1A88) + 0x101D6C);
+                byte[] myCode = new byte[] { 0x50, 0x53, 0x8B, 0x44, 0x24, 0x14, 0x8B, 0x5C, 0x24, 0x10, 0xF6, 0x40, 0x38, 0x70, 0x74, 0x0D, 0xF6, 0x43, 0x38, 0x70, 0x74, 0x07, 0x5B, 0x58, 0x31, 0xC0, 0xC2, 0x0C, 0x00, 0x5B, 0x58, 0x68, 0xC0, 0xAD, 0x43, 0x00, 0xC3 };
+                int myCodePtr = Allocate(0, myCode.Length);
+                Write(myCodePtr, myCode);
+                Write(0x43389A + 1, myCodePtr - (0x43389A + 5));
+                Write(0x439A7D + 1, myCodePtr - (0x439A7D + 5));
+                Write(0x43A34E + 1, myCodePtr - (0x43A34E + 5));
+                Write(0x473343, new byte[] { 0x31, 0xC0, 0x90 });
+                Write(ReadInt(0xEC1A88) + 0x3D4, 0);
             }
 
             if (gameProcesses > 0)
@@ -61,30 +64,12 @@ namespace CloNoBump
                     " ➤ Free to choose the same character multiple times!\n" +
                     " ➤ Free from bumps!\n" +
                     " ➤ Free from AI players!\n" +
-                    " ➤ Able to race 60 seconds before getting DNF!\n\n" +
                     "Enjoy! :)", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
             else
             {
                 MessageBox.Show("Please start Sonic & All-Stars Racing Transformed first!", "CloNoBump", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-        private static int ReadInt(int Address)
-        {
-            return BitConverter.ToInt32(ReadBytes(Address, 4), 0);
-        }
-
-        private static byte[] ReadBytes(int Address, int ByteCount)
-        {
-            byte[] Bytes = new byte[ByteCount];
-            ReadProcessMemory(processHandle, Address, Bytes, ByteCount, 0);
-            return Bytes;
-        }
-
-        public static void SetBytes(int Address, byte[] Bytes)
-        {
-            WriteProcessMemory(processHandle, Address, Bytes, Bytes.Length, 0);
         }
     }
 }
